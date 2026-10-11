@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#10151d" />
+    <title>Knight Forge — Chess Club</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#"
+          ><span class="brand-mark">♞</span
+          ><span
+            ><strong>KNIGHT FORGE</strong
+            ><small>THE PRIVATE CHESS CLUB</small></span
+          ></a
+        >
+        <div class="top-actions">
+          <span class="local-label"><i></i> PASS &amp; PLAY</span
+          ><button class="text-button" id="saved-open">
+            ▤ Saved matches <b id="saved-count">0</b>
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero-row">
+          <div>
+            <div class="eyebrow">THE BOARD IS YOURS</div>
+            <h1>Two minds.<br /><em>One move ahead.</em></h1>
+          </div>
+          <p>
+            A thoughtful chess experience for two players, sharing one board and
+            one device.
+          </p>
+        </section>
+
+        <section class="game-layout">
+          <div class="board-column">
+            <div class="player-bar" id="black-player-bar">
+              <div class="player-avatar dark-avatar">♚</div>
+              <div class="player-meta">
+                <strong id="black-name">Player 2</strong><small>BLACK</small>
+              </div>
+              <div class="captured" id="black-captured"></div>
+              <div class="clock" id="black-clock">10:00</div>
+            </div>
+            <div class="board-frame">
+              <div class="coordinates files" id="files-top"></div>
+              <div class="board-row">
+                <div class="coordinates ranks" id="ranks-left"></div>
+                <div
+                  class="chessboard"
+                  id="chessboard"
+                  role="grid"
+                  aria-label="Chess board"
+                ></div>
+                <div class="coordinates ranks" id="ranks-right"></div>
+              </div>
+              <div class="coordinates files bottom" id="files-bottom"></div>
+            </div>
+            <div class="player-bar bottom-player" id="white-player-bar">
+              <div class="player-avatar light-avatar">♔</div>
+              <div class="player-meta">
+                <strong id="white-name">Player 1</strong><small>WHITE</small>
+              </div>
+              <div class="captured" id="white-captured"></div>
+              <div class="clock" id="white-clock">10:00</div>
+            </div>
+            <div class="board-hint" id="board-hint">
+              White moves first · Select a piece to see its legal moves
+            </div>
+          </div>
+
+          <aside class="control-panel">
+            <div class="panel-head">
+              <div class="eyebrow">MATCH CONTROL</div>
+              <h2 id="panel-title">Ready<br /><em>when you are.</em></h2>
+              <p id="panel-subtitle">
+                Set up your match, take your seats, and let the game begin.
+              </p>
+            </div>
+            <div class="match-status">
+              <div class="status-line">
+                <span>GAME STATUS</span
+                ><span class="status-dot" id="status-dot"></span>
+              </div>
+              <strong id="game-status">Match not started</strong
+              ><small id="status-detail"
+                >Choose a time control and start a new match.</small
+              >
+            </div>
+            <div class="turn-summary">
+              <div class="turn-icon" id="turn-icon">♔</div>
+              <div>
+                <small>TO MOVE</small><strong id="turn-name">White</strong>
+              </div>
+              <span class="turn-chip" id="turn-chip">WHITE</span>
+            </div>
+            <div class="clock-presets">
+              <div class="section-heading">
+                <span>TIME CONTROL</span><span id="mode-caption">RAPID</span>
+              </div>
+              <div class="preset-grid">
+                <button class="preset" data-mode="classic">
+                  <strong>30 min</strong><small>CLASSIC · +0</small>
+                </button>
+                <button class="preset" data-mode="rapid">
+                  <strong>10 min</strong><small>RAPID · +5 sec</small>
+                </button>
+                <button class="preset active" data-mode="blitz">
+                  <strong>5 min</strong><small>BLITZ · +3 sec</small>
+                </button>
+              </div>
+            </div>
+            <div class="action-grid">
+              <button class="action primary" id="new-match">
+                ＋ New match
+              </button>
+              <button class="action" id="pause-match">Ⅱ Pause</button>
+              <button class="action" id="undo-move">↶ Undo move</button>
+              <button class="action" id="flip-board">⇅ Flip board</button>
+            </div>
+            <div class="moves-area">
+              <div class="section-heading">
+                <span>MOVE HISTORY</span><span id="move-count">0 moves</span>
+              </div>
+              <div class="move-list" id="move-list">
+                <div class="empty">Your match moves will appear here.</div>
+              </div>
+            </div>
+            <div class="utility-row">
+              <button id="replay-open">▶ Replay</button
+              ><button id="save-match">♡ Save match</button>
+            </div>
+            <div class="panel-foot">
+              ♟ &nbsp; Respect the clock. Trust your instincts.
+            </div>
+          </aside>
+        </section>
+      </main>
+      <footer>
+        <span>KNIGHT FORGE</span
+        ><span>LOCAL TWO-PLAYER CHESS · MADE FOR THE LOVE OF THE GAME</span>
+      </footer>
+    </div>
+
+    <!-- New match setup -->
+    <div class="overlay" id="setup-modal">
+      <div class="dialog setup-dialog">
+        <button class="close" id="setup-close" aria-label="Close">×</button>
+        <div class="eyebrow">BEFORE THE FIRST MOVE</div>
+        <h2>Set up your <em>match.</em></h2>
+        <p class="dialog-copy">Choose your players and the pace of play.</p>
+        <div class="name-fields">
+          <label
+            >PLAYER 1 <span>WHITE</span
+            ><input
+              id="input-white"
+              maxlength="22"
+              value="Player 1"
+              placeholder="White player name"
+          /></label>
+          <label
+            >PLAYER 2 <span>BLACK</span
+            ><input
+              id="input-black"
+              maxlength="22"
+              value="Player 2"
+              placeholder="Black player name"
+          /></label>
+        </div>
+        <div class="setup-label">CHOOSE YOUR TIME CONTROL</div>
+        <div class="setup-modes">
+          <label class="mode-option"
+            ><input type="radio" name="setup-mode" value="classic" /><span
+              ><b>Classic</b><small>30:00 · No increment</small></span
+            ></label
+          >
+          <label class="mode-option"
+            ><input type="radio" name="setup-mode" value="rapid" /><span
+              ><b>Rapid</b><small>10:00 · +5 seconds per move</small></span
+            ></label
+          >
+          <label class="mode-option"
+            ><input type="radio" name="setup-mode" value="blitz" checked /><span
+              ><b>Blitz</b><small>05:00 · +3 seconds per move</small></span
+            ></label
+          >
+        </div>
+        <button class="primary wide" id="start-match">
+          Start match <span>→</span>
+        </button>
+        <small class="fine-print"
+          >Both players use the same device. The clock starts when the match
+          begins.</small
+        >
+      </div>
+    </div>
+
+    <!-- Promotion -->
+    <div class="overlay hidden" id="promotion-modal">
+      <div class="dialog promotion-dialog">
+        <div class="eyebrow">PAWN PROMOTION</div>
+        <h2>Choose your piece</h2>
+        <div id="promotion-options" class="promotion-options"></div>
+      </div>
+    </div>
+
+    <!-- End match -->
+    <div class="overlay hidden" id="result-modal">
+      <div class="dialog result-dialog">
+        <div class="result-symbol" id="result-symbol">♛</div>
+        <div class="eyebrow">MATCH COMPLETE</div>
+        <h2 id="result-title">Checkmate</h2>
+        <p id="result-copy"></p>
+        <div class="result-actions">
+          <button class="primary" id="rematch">Play again</button
+          ><button class="secondary" id="result-replay">Review game</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Replay -->
+    <div class="overlay hidden" id="replay-modal">
+      <div class="dialog replay-dialog">
+        <button class="close" id="replay-close">×</button>
+        <div class="eyebrow">GAME REVIEW</div>
+        <h2>Replay the <em>match.</em></h2>
+        <p class="dialog-copy" id="replay-label">Step through every move.</p>
+        <div class="replay-controls">
+          <button id="replay-start">|◀</button
+          ><button id="replay-prev">←</button
+          ><span id="replay-step">Start position</span
+          ><button id="replay-next">→</button
+          ><button id="replay-end">▶|</button>
+        </div>
+        <div class="replay-progress">
+          <input id="replay-range" type="range" min="0" max="0" value="0" />
+        </div>
+        <button class="secondary wide" id="replay-done">
+          Return to live board
+        </button>
+      </div>
+    </div>
+
+    <!-- Saved matches -->
+    <div class="overlay hidden" id="saved-modal">
+      <div class="dialog saved-dialog">
+        <button class="close" id="saved-close">×</button>
+        <div class="eyebrow">YOUR CHESS ARCHIVE</div>
+        <h2>Saved <em>matches.</em></h2>
+        <p class="dialog-copy">
+          Games are stored in this browser on this device.
+        </p>
+        <div id="saved-list" class="saved-list"></div>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>
